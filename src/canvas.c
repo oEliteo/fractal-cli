@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-canvas_t *canvas_create(int width, int height) {
+canvas_t *canvas_create(size_t width, size_t height) {
   canvas_t *canvas = malloc(sizeof(canvas_t));
   if (canvas == NULL)
     return NULL;
@@ -36,20 +36,20 @@ void canvas_clear(canvas_t *c) {
   return;
 }
 
-void canvas_set_pixel(canvas_t *c, int x, int y, char ch) {
-  if (x < 0 || x >= c->width)
+void canvas_set_pixel(canvas_t *c, size_t x, size_t y, char ch) {
+  if (x >= c->width)
     return;
-  if (y < 0 || y >= c->height)
+  if (y >= c->height)
     return;
 
-  int index = y * c->width + x;
+  size_t index = y * c->width + x;
   c->data[index] = ch;
   return;
 }
 
 void canvas_draw(const canvas_t *c) {
-  for (int i = 0; i < c->height; i++) {
-    for (int j = 0; j < c->width; j++) {
+  for (size_t i = 0; i < c->height; i++) {
+    for (size_t j = 0; j < c->width; j++) {
       printf("%c", c->data[i * c->width + j]);
     }
     printf("\n");
