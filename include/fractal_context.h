@@ -19,7 +19,7 @@ void context_destroy(context_t *ctx);
 c_coord_t grid_coord_to_complex_coord(canvas_t *c, context_t *ctx, size_t x,
                                       size_t y);
 
-int iterative_escape(context_t *ctx, size_t x, size_t y);
+int iterative_escape(context_t *ctx, c_coord_t coord);
 
 char ascii_character_to_draw(context_t *ctx, int iterations);
 
