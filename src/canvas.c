@@ -7,7 +7,7 @@ canvas_t *canvas_create(size_t width, size_t height) {
   canvas_t *canvas = malloc(sizeof(canvas_t));
   if (canvas == NULL)
     return NULL;
-  canvas->data = malloc(sizeof(char) * width * height);
+  canvas->data = malloc(sizeof(pixel_t) * width * height);
   if (canvas->data == NULL) {
     free(canvas);
     return NULL;
@@ -36,23 +36,24 @@ void canvas_clear(canvas_t *c) {
   return;
 }
 
-void canvas_set_pixel(canvas_t *c, size_t x, size_t y, char ch) {
+void canvas_set_pixel(canvas_t *c, size_t x, size_t y, pixel_t pixel) {
   if (x >= c->width)
     return;
   if (y >= c->height)
     return;
 
   size_t index = y * c->width + x;
-  c->data[index] = ch;
+  c->data[index] = pixel;
   return;
 }
 
 void canvas_draw(const canvas_t *c) {
   for (size_t i = 0; i < c->height; i++) {
     for (size_t j = 0; j < c->width; j++) {
-      printf("%c", c->data[i * c->width + j]);
+      pixel_t p = c->data[i * c->width + j];
+      printf("\x1b[38;2;%u;%u;%um%c", p.red, p.green, p.blue, p.ascii);
     }
-    printf("\n");
+    printf("\x1b[0m\n");
   }
   return;
 }

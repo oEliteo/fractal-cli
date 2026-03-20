@@ -21,7 +21,7 @@ c_coord_t grid_coord_to_complex_coord(canvas_t *c, context_t *ctx, size_t x,
 
 int iterative_escape(context_t *ctx, c_coord_t coord);
 
-char ascii_character_to_draw(context_t *ctx, int iterations);
+pixel_t pixel_to_draw(context_t *ctx, int iterations);
 
 context_t *init_mandelbrot(context_t *ctx);
 

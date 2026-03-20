@@ -1,4 +1,5 @@
 #include "../include/fractal_context.h"
+#include "../include/canvas.h"
 #include "../include/complex_coord.h"
 #include <string.h>
 
@@ -52,15 +53,19 @@ int iterative_escape(context_t *ctx, c_coord_t coord) {
   return iterations;
 }
 
-char ascii_character_to_draw(context_t *ctx, int iterations) {
-  const char *characters = " .:-=+*#%$@";
-  char ascii = '#';
-  if (iterations == ctx->max_iterations) {
-    iterations = iterations - 1;
-  }
-  int index = (iterations * (strlen(characters) - 1)) / ctx->max_iterations;
-  ascii = characters[index];
-  return ascii;
+pixel_t pixel_to_draw(context_t *ctx, int iterations) {
+  const pixel_t pixelPalette[11] = {
+      {'.', 30, 30, 46},    {':', 88, 91, 112},   {'-', 147, 153, 178},
+      {'=', 180, 190, 254}, {'@', 137, 180, 250}, {' ', 30, 30, 46},
+      {'@', 137, 180, 250}, {'=', 180, 190, 254}, {'-', 147, 153, 178},
+      {':', 88, 91, 112},   {'.', 30, 30, 46},
+  };
+  pixel_t pixel;
+  int index =
+      (iterations * (sizeof(pixelPalette) / sizeof(pixelPalette[0]) - 1)) /
+      ctx->max_iterations;
+  pixel = pixelPalette[index];
+  return pixel;
 }
 
 context_t *init_mandelbrot(context_t *ctx) {
@@ -70,6 +75,6 @@ context_t *init_mandelbrot(context_t *ctx) {
   ctx->real_max = 1.0;
   ctx->imaginary_min = -1.0;
   ctx->imaginary_max = 1.0;
-  ctx->max_iterations = 100;
+  ctx->max_iterations = 15;
   return ctx;
 }
