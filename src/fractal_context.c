@@ -21,10 +21,10 @@ void context_destroy(context_t *ctx) {
 
 c_coord_t grid_coord_to_complex_coord(canvas_t *c, context_t *ctx, size_t x,
                                       size_t y) {
-  double real_x = (double)x / ((double)(c->width - 1.0));
+  long double real_x = (long double)x / ((long double)(c->width - 1.0));
   real_x = (real_x * (ctx->real_max - ctx->real_min));
   real_x = real_x + ctx->real_min;
-  double imaginary_y = (double)y / ((double)(c->height - 1.0));
+  long double imaginary_y = (long double)y / ((long double)(c->height - 1.0));
   imaginary_y = (imaginary_y * (ctx->imaginary_max - ctx->imaginary_min));
   imaginary_y = imaginary_y + ctx->imaginary_min;
 
@@ -35,13 +35,13 @@ c_coord_t grid_coord_to_complex_coord(canvas_t *c, context_t *ctx, size_t x,
 }
 
 int iterative_escape(context_t *ctx, c_coord_t coord) {
-  double z_real = 0.0;
-  double z_imaginary = 0.0;
+  long double z_real = 0.0;
+  long double z_imaginary = 0.0;
   int iterations = 0;
 
   while (iterations < ctx->max_iterations) {
-    double new_real = (z_real * z_real) - (z_imaginary * z_imaginary);
-    double new_imaginary = 2 * z_real * z_imaginary;
+    long double new_real = (z_real * z_real) - (z_imaginary * z_imaginary);
+    long double new_imaginary = 2 * z_real * z_imaginary;
     z_real = new_real + coord.real;
     z_imaginary = new_imaginary + coord.imaginary;
 

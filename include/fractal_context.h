@@ -5,10 +5,10 @@
 #include <stdlib.h>
 
 typedef struct Context {
-  double real_min;
-  double real_max;
-  double imaginary_min;
-  double imaginary_max;
+  long double real_min;
+  long double real_max;
+  long double imaginary_min;
+  long double imaginary_max;
   int max_iterations;
 } context_t;
 

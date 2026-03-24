@@ -27,90 +27,97 @@ int main() {
   char input_char;
   int changed = 0;
   double pan_distance;
-  double zoom_distance;
   double center;
   while (1) {
-    if (changed == 0) {
-      if (read(STDIN_FILENO, &input_char, 1) == 1) {
-        // Exit The Program
-        if (input_char == 'q') {
-          break;
-        }
-        // Pan Left
-        if (input_char == 'h') {
-          pan_distance = (ctx->real_max - ctx->real_min) * 0.1;
-          ctx->real_max = ctx->real_max - pan_distance;
-          ctx->real_min = ctx->real_min - pan_distance;
-          changed = 1;
-        }
-        // Pan Right
-        if (input_char == 'l') {
-          pan_distance = (ctx->real_max - ctx->real_min) * 0.1;
-          ctx->real_max = ctx->real_max + pan_distance;
-          ctx->real_min = ctx->real_min + pan_distance;
-          changed = 1;
-        }
-        // Pan Up
-        if (input_char == 'k') {
-          pan_distance = (ctx->imaginary_max - ctx->imaginary_min) * 0.1;
-          ctx->imaginary_max = ctx->imaginary_max - pan_distance;
-          ctx->imaginary_min = ctx->imaginary_min - pan_distance;
-          changed = 1;
-        }
-        // Pan Down
-        if (input_char == 'j') {
-          pan_distance = (ctx->imaginary_max - ctx->imaginary_min) * 0.1;
-          ctx->imaginary_max = ctx->imaginary_max + pan_distance;
-          ctx->imaginary_min = ctx->imaginary_min + pan_distance;
-          changed = 1;
-        }
+    if (read(STDIN_FILENO, &input_char, 1) == 1) {
+      // Exit The Program
+      if (input_char == 'q') {
+        break;
+      }
+      // Pan Left
+      if (input_char == 'h') {
+        pan_distance = (ctx->real_max - ctx->real_min) * 0.1;
+        ctx->real_max = ctx->real_max - pan_distance;
+        ctx->real_min = ctx->real_min - pan_distance;
+        changed = 1;
+      }
+      // Pan Right
+      if (input_char == 'l') {
+        pan_distance = (ctx->real_max - ctx->real_min) * 0.1;
+        ctx->real_max = ctx->real_max + pan_distance;
+        ctx->real_min = ctx->real_min + pan_distance;
+        changed = 1;
+      }
+      // Pan Up
+      if (input_char == 'k') {
+        pan_distance = (ctx->imaginary_max - ctx->imaginary_min) * 0.1;
+        ctx->imaginary_max = ctx->imaginary_max - pan_distance;
+        ctx->imaginary_min = ctx->imaginary_min - pan_distance;
+        changed = 1;
+      }
+      // Pan Down
+      if (input_char == 'j') {
+        pan_distance = (ctx->imaginary_max - ctx->imaginary_min) * 0.1;
+        ctx->imaginary_max = ctx->imaginary_max + pan_distance;
+        ctx->imaginary_min = ctx->imaginary_min + pan_distance;
+        changed = 1;
+      }
 
-        // Zoom In
-        if (input_char == 'i') {
-          // Zoom real axis
+      // Zoom In
+      if (input_char == 'i') {
+        // Zoom real axis
+        long double zoom_real = (ctx->real_max - ctx->real_min) * 0.9;
+        long double zoom_imag = (ctx->imaginary_max - ctx->imaginary_min) * 0.9;
+        const long double smallest = 1e-17L;
+        if (zoom_real < smallest || zoom_imag < smallest) {
+          changed = 0;
+        } else {
           center = (ctx->real_max + ctx->real_min) / 2.0;
-          zoom_distance = (ctx->real_max - ctx->real_min) * 0.9;
-          ctx->real_max = center + (zoom_distance / 2.0);
-          ctx->real_min = center - (zoom_distance / 2.0);
+          ctx->real_max = center + (zoom_real / 2.0);
+          ctx->real_min = center - (zoom_real / 2.0);
           // Zoom Imaginary axis
           center = (ctx->imaginary_max + ctx->imaginary_min) / 2.0;
-          zoom_distance = (ctx->imaginary_max - ctx->imaginary_min) * 0.9;
-          ctx->imaginary_max = center + (zoom_distance / 2.0);
-          ctx->imaginary_min = center - (zoom_distance / 2.0);
+          ctx->imaginary_max = center + (zoom_imag / 2.0);
+          ctx->imaginary_min = center - (zoom_imag / 2.0);
           changed = 1;
         }
+      }
 
-        // Zoom Out
-        if (input_char == 'o') {
-          // Zoom real axis
+      // Zoom Out
+      if (input_char == 'o') {
+        // Zoom real axis
+        long double zoom_real = (ctx->real_max - ctx->real_min) * 1.1;
+        long double zoom_imag = (ctx->imaginary_max - ctx->imaginary_min) * 1.1;
+        const long double smallest = 1e-17L;
+        if (zoom_real < smallest || zoom_imag < smallest) {
+          changed = 0;
+        } else {
           center = (ctx->real_max + ctx->real_min) / 2.0;
-          zoom_distance = (ctx->real_max - ctx->real_min) * 1.1;
-          ctx->real_max = center + (zoom_distance / 2.0);
-          ctx->real_min = center - (zoom_distance / 2.0);
+          ctx->real_max = center + (zoom_real / 2.0);
+          ctx->real_min = center - (zoom_real / 2.0);
           // Zoom Imaginary axis
           center = (ctx->imaginary_max + ctx->imaginary_min) / 2.0;
-          zoom_distance = (ctx->imaginary_max - ctx->imaginary_min) * 1.1;
-          ctx->imaginary_max = center + (zoom_distance / 2.0);
-          ctx->imaginary_min = center - (zoom_distance / 2.0);
+          ctx->imaginary_max = center + (zoom_imag / 2.0);
+          ctx->imaginary_min = center - (zoom_imag / 2.0);
           changed = 1;
         }
-        // Decrease Precision (Faster)
-        if (input_char == '[') {
-          ctx->max_iterations = ctx->max_iterations - 5;
-          if (ctx->max_iterations < 1) {
-            ctx->max_iterations = 1;
-          }
-          changed = 1;
+      }
+      // Decrease Precision (Faster)
+      if (input_char == '[') {
+        ctx->max_iterations = ctx->max_iterations - 5;
+        if (ctx->max_iterations < 1) {
+          ctx->max_iterations = 1;
         }
+        changed = 1;
+      }
 
-        // Increase Precision (Slower but more detail)
-        if (input_char == ']') {
-          ctx->max_iterations = ctx->max_iterations + 5;
-          if (ctx->max_iterations > 5000) {
-            ctx->max_iterations = 5000;
-          }
-          changed = 1;
+      // Increase Precision (Slower but more detail)
+      if (input_char == ']') {
+        ctx->max_iterations = ctx->max_iterations + 5;
+        if (ctx->max_iterations > 5000) {
+          ctx->max_iterations = 5000;
         }
+        changed = 1;
       }
     }
     if (changed) {

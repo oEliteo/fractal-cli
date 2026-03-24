@@ -2,8 +2,8 @@
 #define COMPLEX_COORD_H
 
 typedef struct ComplexCoord {
-  double real;
-  double imaginary;
+  long double real;
+  long double imaginary;
 } c_coord_t;
 
 #endif
