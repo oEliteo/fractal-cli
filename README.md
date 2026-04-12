@@ -20,6 +20,6 @@ A CLI/TUI Application that generates ASCII fractals. Inspired by a C++ project I
 * allow the ascii fractal to be copied to the clipboard
 * allow multiple fractal images to be saved in a session to create animations of fractal zooms with tools like ffmpeg.
 
-# Known Issues
-* At certain levels of zoom the math begins to breakdown (likely due to floating point precision) causing
-  large blobs of ascii that remain unchanging even after attempting to zoom back out, or alter maximum iteration count.
+# Fixes / Future Progress Ideas
+* Clamped floating point values at extreme zoom levels to prevent rounding errors and fractals to become broken.
+* Implement a system to allow for zooming in further that circumvents hardware limitations by having proper representation for really large or really small numbers. (BigNums)
